@@ -42,7 +42,7 @@ module Nagios
         return 2
       end
       if values[metrics.index('us')].to_i > @warning_us or
-         values[metrics.index('free')].to_i < @warning_free or
+         values[metrics.index('free')].to_i < @warning_free
         return 1
       end
       return 0
