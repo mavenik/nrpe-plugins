@@ -20,7 +20,7 @@ module Nagios
 
     def nagios_exit(exit_code, message, perf_stats)
       code_strings = [ "OK", "WARNING", "CRITICAL", "UNKNOWN", "DEPEDENT" ]
-      puts "PASSENGER #{code_strings[exit_code]} - #{message}|#{perf_stats}"
+      puts "VMSTAT #{code_strings[exit_code]} - #{message}|#{perf_stats}"
       exit(exit_code)
     end
 
@@ -33,10 +33,10 @@ module Nagios
       values = values.split(/\s+/)
       performance_stats = metrics.zip(values).map{|stat| "stat[0]=stat[1]"}
 
-      nagios_exit(exit_code_for(metrics, values),[active,waiting].join(', '),[max,worker_count,active,inactive,waiting].join(';'))
+      nagios_exit(exit_code_for(metrics, values),["cpu=#{values[metrics.index('us')].to_i}", "free memory=#{values[metrics.index('free')].to_i / 1024}M"].join(', '),performance_stats.join(';'))
     end
 
-    def exit_code_for(max, active, waiting)
+    def exit_code_for(metrics, values)
       if values[metrics.index('us')].to_i > @critical_cs or
          values[metrics.index('free')].to_i < @critical_free
         return 2
