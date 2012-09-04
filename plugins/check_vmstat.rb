@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 module Nagios
   class Vmstat
-    attr_accessor :warning_cs, :warning_free, :critical_cs, :critical_free
+    attr_accessor :warning_us, :warning_free, :critical_us, :critical_free
 
     def initialize
       warning_index = ARGV.index('-wcs')
-      @warning_cs = !!warning_index ? ARGV[warning_index+1].to_i : 75
+      @warning_us = !!warning_index ? ARGV[warning_index+1].to_i : 75
 
       critical_index = ARGV.index('-ccs')
-      @critical_cs = !!critical_index ? ARGV[critical_index+1].to_i : 90
+      @critical_us = !!critical_index ? ARGV[critical_index+1].to_i : 90
 
       warning_index = ARGV.index('-wfree')
       @warning_free = !!warning_index ? ARGV[warning_index+1].to_i : 102400
@@ -31,17 +31,17 @@ module Nagios
 
       metrics = metrics.split(/\s+/)
       values = values.split(/\s+/)
-      performance_stats = metrics.zip(values).map{|stat| "stat[0]=stat[1]"}
+      performance_stats = metrics.zip(values).map{|stat| "#{stat[0]}=#{stat[1]}"}
 
       nagios_exit(exit_code_for(metrics, values),["cpu=#{values[metrics.index('us')].to_i}", "free memory=#{values[metrics.index('free')].to_i / 1024}M"].join(', '),performance_stats.join(';'))
     end
 
     def exit_code_for(metrics, values)
-      if values[metrics.index('us')].to_i > @critical_cs or
+      if values[metrics.index('us')].to_i > @critical_us or
          values[metrics.index('free')].to_i < @critical_free
         return 2
       end
-      if values[metrics.index('us')].to_i > @warning_cs or
+      if values[metrics.index('us')].to_i > @warning_us or
          values[metrics.index('free')].to_i < @warning_free or
         return 1
       end
