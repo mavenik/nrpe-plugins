@@ -4,10 +4,10 @@ module Nagios
     attr_accessor :warning_us, :warning_free, :critical_us, :critical_free
 
     def initialize
-      warning_index = ARGV.index('-wcs')
+      warning_index = ARGV.index('-wus')
       @warning_us = !!warning_index ? ARGV[warning_index+1].to_i : 75
 
-      critical_index = ARGV.index('-ccs')
+      critical_index = ARGV.index('-cus')
       @critical_us = !!critical_index ? ARGV[critical_index+1].to_i : 90
 
       warning_index = ARGV.index('-wfree')
