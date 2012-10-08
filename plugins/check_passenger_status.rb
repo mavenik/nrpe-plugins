@@ -24,12 +24,12 @@ module Nagios
       # Strip white spaces
       max,worker_count,active,inactive,waiting = [max,worker_count,active,inactive,waiting].map{|metric| metric.gsub(/\s+/,'')}
 
-      nagios_exit(exit_code_for(max,active,waiting),[active,waiting].join(', '),[max,worker_count,active,inactive,waiting].join(';'))
+      nagios_exit(exit_code_for(waiting),[active,waiting].join(', '),[max,worker_count,active,inactive,waiting].join(';'))
     end
 
-    def exit_code_for(max, active, waiting)
+    def exit_code_for(waiting)
       return 2 if waiting.split('=')[1].to_i > @critical
-      return 1 if (max.split('=')[1].to_i - active.split('=')[1].to_i) < @warning
+      return 1 if waiting.split('=')[1].to_i > @warning
       return 0
     end
   end
