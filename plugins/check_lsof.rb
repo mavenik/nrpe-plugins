@@ -12,9 +12,9 @@ module Nagios
     end
 
     def check_status
-      waiting_connections = `sudo lsof | wc -l`.split("\n")[0]
+      open_descriptors = `sudo lsof | wc -l`.split("\n")[0]
 
-      nagios_exit(0, "waiting=#{waiting_connections}", "waiting=#{waiting_connections}")
+      nagios_exit(0, "open=#{open_descriptors}", "open=#{open_descriptors}")
     end
 
     # Unused as of now, keeping this for future use
