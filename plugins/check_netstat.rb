@@ -12,7 +12,7 @@ module Nagios
     end
 
     def check_status
-      waiting_connections = `netstat -al | grep -i wait`
+      waiting_connections = `netstat -al | grep -i wait | wc -l`
 
       nagios_exit(0, "waiting=#{waiting_connections}", "waiting=#{waiting_connections}")
     end
