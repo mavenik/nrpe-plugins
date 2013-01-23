@@ -33,7 +33,7 @@ module Nagios
       values = values.split(/\s+/)
       performance_stats = metrics.zip(values).map{|stat| "#{stat[0]}=#{stat[1]}"}
 
-      nagios_exit(exit_code_for(metrics, values),["cpu=#{values[metrics.index('us')].to_i}", "free memory=#{values[metrics.index('free')].to_i / 1024}M"].join(', '),performance_stats.join(';'))
+      nagios_exit(exit_code_for(metrics, values),["cpu=#{values[metrics.index('us')].to_i}", "free memory=#{values[metrics.index('free')].to_i / 1024}M"].join(', '),performance_stats.join(' '))
     end
 
     def exit_code_for(metrics, values)
