@@ -24,7 +24,7 @@ module Nagios
       # Strip white spaces
       max,worker_count,active,inactive,waiting = [max,worker_count,active,inactive,waiting].map{|metric| metric.gsub(/\s+/,'')}
 
-      nagios_exit(exit_code_for(waiting,active),[active,waiting].join(', '),[max,worker_count,active,inactive,waiting].join(';'))
+      nagios_exit(exit_code_for(waiting,active),[active,waiting].join(', '),[max,worker_count,active,inactive,waiting].join(' '))
     end
 
     def exit_code_for(waiting,active)
